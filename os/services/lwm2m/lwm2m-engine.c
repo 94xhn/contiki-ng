@@ -1567,10 +1567,11 @@ lwm2m_queue_mode_request_received();
   }
 
   /* PUT/POST - e.g. write will not send in offset here - Maybe in the future? */
-  if((offset != NULL && *offset == 0) &&
-     coap_is_option(request, COAP_OPTION_BLOCK1)) {
+  if(coap_is_option(request, COAP_OPTION_BLOCK1)) {
     coap_get_header_block1(request, &bnum, &bmore, &bsize, &boffset);
-    context.offset = boffset;
+    if(offset != NULL && *offset == 0) {
+      context.offset = boffset;
+    }
   }
 
   /* This is a discovery operation */
